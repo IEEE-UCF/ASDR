@@ -1,0 +1,8 @@
+prefix=/home/casey/ASDR/Backend/ROS/devel
+
+Name: serial_command_client
+Description: Description of serial_command_client
+Version: 0.0.0
+Cflags: -I/home/casey/ASDR/Backend/ROS/devel/include
+Libs: -L${prefix}/lib 
+Requires: 

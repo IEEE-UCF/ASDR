@@ -1,0 +1,8 @@
+prefix=/home/casey/ASDR/Backend/ROS/devel
+
+Name: stepper_motor
+Description: Description of stepper_motor
+Version: 0.0.0
+Cflags: -I/home/casey/ASDR/Backend/ROS/devel/include
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,10 @@
+(cl:defpackage rotary_encoder-srv
+  (:use )
+  (:export
+   "GET_ROTARY_ENCODER"
+   "<GET_ROTARY_ENCODER-REQUEST>"
+   "GET_ROTARY_ENCODER-REQUEST"
+   "<GET_ROTARY_ENCODER-RESPONSE>"
+   "GET_ROTARY_ENCODER-RESPONSE"
+  ))
+
