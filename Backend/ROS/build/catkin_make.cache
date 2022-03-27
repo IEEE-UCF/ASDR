@@ -1,2 +1,0 @@
-asdr:berry_imu:coverage_path_planner:discovery:mobile_base:rest:rotary_encoder:serial_command_client:stepper_motor:uvc_light
--DCATKIN_DEVEL_PREFIX=/home/casey/ASDR/Backend/ROS/devel -DCMAKE_INSTALL_PREFIX=/home/casey/ASDR/Backend/ROS/install -G Unix Makefiles

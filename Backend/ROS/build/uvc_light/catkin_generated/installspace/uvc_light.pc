@@ -1,8 +1,0 @@
-prefix=/home/casey/ASDR/Backend/ROS/install
-
-Name: uvc_light
-Description: Description of uvc_light
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: 

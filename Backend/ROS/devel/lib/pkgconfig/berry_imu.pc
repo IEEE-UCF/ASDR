@@ -1,8 +1,0 @@
-prefix=/home/casey/ASDR/Backend/ROS/devel
-
-Name: berry_imu
-Description: Description of berry_imu
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

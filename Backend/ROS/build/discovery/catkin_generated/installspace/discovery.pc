@@ -1,8 +1,0 @@
-prefix=/home/casey/ASDR/Backend/ROS/install
-
-Name: discovery
-Description: Description of discovery
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: 
