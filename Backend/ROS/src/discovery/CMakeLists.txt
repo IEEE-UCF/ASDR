@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8)
 project(discovery)
 
 ## Find catkin and any catkin packages
-find_package(catkin REQUIRED COMPONENTS tf roscpp rospy pcl_conversions std_msgs nav_msgs geometry_msgs sensor_msgs visualization_msgs genmsg)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy pcl_conversions std_msgs nav_msgs geometry_msgs sensor_msgs visualization_msgs genmsg)
 
 find_package(PCL 1.10)
 

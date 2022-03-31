@@ -16,8 +16,6 @@
 #include "nav_msgs/OccupancyGrid.h"
 #include "geometry_msgs/Pose.h"
 
-#include "tf/transform_listener.h"
-
 #include "a_star/a_star.h"
 
 #include "a_star.hpp"
