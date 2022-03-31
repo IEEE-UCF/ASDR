@@ -28,7 +28,7 @@ void CoverageNode::onOccupancyGrid(nav_msgs::OccupancyGrid::ConstPtr const &occu
 bool CoverageNode::onCoverage(coverage::coverage::Request &request, coverage::coverage::Response &response)
 {
     if (m_occupancy_grid.has_value()) {
-        nav_msgs::OccupancyGrid const occupancy_grid = m_occupancy_grid.value();
+        nav_msgs::OccupancyGrid const &occupancy_grid = m_occupancy_grid.value();
 
         pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud(new pcl::PointCloud<pcl::PointXYZ>);
         pcl::PointCloud<pcl::PointXYZ>::Ptr point_cloud_filtered(new pcl::PointCloud<pcl::PointXYZ>);

@@ -26,16 +26,16 @@ class AStar
         std::array<uint32_t, 2> m_current;
         std::array<uint32_t, 2> m_previous;
 
-        float m_g_weight;
-        float m_h_weight;
+        float m_g_score;
+        float m_h_score;
 
         bool m_closed;
 
         Node() :
-            m_current { { 0U, 0U } },
+            m_current { { ~0U, ~0U } },
             m_previous { { ~0U, ~0U } },
-            m_g_weight { std::numeric_limits<float>::infinity() },
-            m_h_weight { std::numeric_limits<float>::infinity() },
+            m_g_score { std::numeric_limits<float>::infinity() },
+            m_h_score { std::numeric_limits<float>::infinity() },
             m_closed { false }
         {
         }
@@ -43,24 +43,24 @@ class AStar
         Node(std::array<uint32_t, 2> const &current) :
             m_current { current },
             m_previous { { ~0U, ~0U } },
-            m_g_weight { 0.0f },
-            m_h_weight { 0.0f },
+            m_g_score { 0.0f },
+            m_h_score { 0.0f },
             m_closed { false }
         {
         }
 
-        Node(std::array<uint32_t, 2> const &current, std::array<uint32_t, 2> const &previous, float const &g_weight, float const &h_weight) :
+        Node(std::array<uint32_t, 2> const &current, std::array<uint32_t, 2> const &previous, float const &g_score, float const &h_score) :
             m_current { current },
             m_previous { previous },
-            m_g_weight { g_weight },
-            m_h_weight { h_weight },
+            m_g_score { g_score },
+            m_h_score { h_score },
             m_closed { false }
         {
         }
 
         float getScore() const
         {
-            return m_g_weight + m_h_weight;
+            return m_g_score + m_h_score;
         }
 
         bool operator<(Node const &other) const

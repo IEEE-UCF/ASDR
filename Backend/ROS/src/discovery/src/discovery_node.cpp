@@ -20,7 +20,7 @@ void DiscoveryNode::onOccupancyGrid(nav_msgs::OccupancyGrid::ConstPtr const &occ
 bool DiscoveryNode::onDiscovery(discovery::discovery::Request &request, discovery::discovery::Response &response)
 {
     if (m_occupancy_grid.has_value()) {
-        nav_msgs::OccupancyGrid const occupancy_grid = m_occupancy_grid.value();
+        nav_msgs::OccupancyGrid const &occupancy_grid = m_occupancy_grid.value();
 
         Eigen::Vector3d const position(request.pose.position.x, request.pose.position.y, request.pose.position.z);
 

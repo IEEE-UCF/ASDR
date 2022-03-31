@@ -59,13 +59,13 @@ void AStar::compute(std::optional<std::vector<geometry_msgs::Pose>> &path)
         if (m_occupancy_grid.data[begin_index] == 0 && m_occupancy_grid.data[end_index] == 0) {
             std::array<std::array<int32_t, 2>, 8> const offsets = { { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 } } };
 
-            std::vector<Node> grid(size);
+            std::vector<Node> nodes(size);
 
-            grid[begin_index] = { begin };
+            nodes[begin_index] = { begin };
 
             std::priority_queue<Node> open;
 
-            open.emplace(begin);
+            open.push(nodes[begin_index]);
 
             while (!open.empty()) {
                 std::array<uint32_t, 2> const current = open.top().m_current;
@@ -78,29 +78,31 @@ void AStar::compute(std::optional<std::vector<geometry_msgs::Pose>> &path)
 
                 open.pop();
 
-                size_t const current_index = current_x + current_y * width;
+                if (current_x >= 0 && current_x < width && current_y >= 0 && current_y < height) {
+                    size_t const current_index = current_x + current_y * width;
 
-                grid[current_index].m_closed = true;
+                    nodes[current_index].m_closed = true;
 
-                for (size_t offset_index = 0; offset_index < std::size(offsets); ++offset_index) {
-                    uint32_t const neighbor_x = current_x + offsets[offset_index][0];
-                    uint32_t const neighbor_y = current_y + offsets[offset_index][1];
+                    for (size_t offset_index = 0; offset_index < std::size(offsets); ++offset_index) {
+                        uint32_t const neighbor_x = current_x + offsets[offset_index][0];
+                        uint32_t const neighbor_y = current_y + offsets[offset_index][1];
 
-                    if (neighbor_x >= 0 && neighbor_x < width && neighbor_y >= 0 && neighbor_y < height) {
-                        size_t const neighbor_index = neighbor_x + neighbor_y * width;
+                        if (neighbor_x >= 0 && neighbor_x < width && neighbor_y >= 0 && neighbor_y < height) {
+                            size_t const neighbor_index = neighbor_x + neighbor_y * width;
 
-                        if (m_occupancy_grid.data[neighbor_index] == 0 && !grid[neighbor_index].m_closed) {
-                            float const g_weight = grid[current_index].m_g_weight + 1.0f;
-                            float const h_weight = m_weight * std::sqrt(std::pow(static_cast<float>(static_cast<int64_t>(end_x) - static_cast<int64_t>(neighbor_x)), 2.0f) + std::pow(static_cast<float>(static_cast<int64_t>(end_y) - static_cast<int64_t>(neighbor_y)), 2.0f));
-                            
-                            float const score = g_weight + h_weight;
+                            if (m_occupancy_grid.data[neighbor_index] == 0 && !nodes[neighbor_index].m_closed) {
+                                float const g_score = nodes[current_index].m_g_score + 1.0f;
+                                float const h_score = m_weight * std::sqrt(std::pow(static_cast<float>(static_cast<int64_t>(end_x) - static_cast<int64_t>(neighbor_x)), 2.0f) + std::pow(static_cast<float>(static_cast<int64_t>(end_y) - static_cast<int64_t>(neighbor_y)), 2.0f));
+                                
+                                float const score = g_score + h_score;
 
-                            if (score < grid[neighbor_index].getScore()) {
-                                std::array<uint32_t, 2> const neighbor = { { neighbor_x, neighbor_y } };
+                                if (score < nodes[neighbor_index].getScore()) {
+                                    std::array<uint32_t, 2> const neighbor = { { neighbor_x, neighbor_y } };
 
-                                grid[neighbor_index] = { neighbor, current, g_weight, h_weight };
+                                    nodes[neighbor_index] = { neighbor, current, g_score, h_score };
 
-                                open.push(grid[neighbor_index]);
+                                    open.push(nodes[neighbor_index]);
+                                }
                             }
                         }
                     }
@@ -116,7 +118,7 @@ void AStar::compute(std::optional<std::vector<geometry_msgs::Pose>> &path)
 
                 size_t const current_index = current[0] + current[1] * width;
 
-                current = grid[current_index].m_previous;
+                current = nodes[current_index].m_previous;
             }
 
             std::reverse(std::begin(grid_path), std::end(grid_path));
@@ -126,7 +128,7 @@ void AStar::compute(std::optional<std::vector<geometry_msgs::Pose>> &path)
 
                 pose_path.push_back(m_begin);
 
-                for (size_t index = 1; index < std::size(grid_path) - 1; ++index) {
+                for (size_t index = 1; index < std::size(grid_path); ++index) {
                     Eigen::Vector3d const grid_position(static_cast<float>(grid_path[index][0]) * m_occupancy_grid.info.resolution, static_cast<float>(grid_path[index][1]) * m_occupancy_grid.info.resolution, 0.0);
 
                     Eigen::Vector3d const pose_position = origin_orientation * grid_position + origin_position;
@@ -145,8 +147,6 @@ void AStar::compute(std::optional<std::vector<geometry_msgs::Pose>> &path)
 
                     pose_path.push_back(pose);
                 }
-
-                pose_path.push_back(m_end);
 
                 path = pose_path;
             }

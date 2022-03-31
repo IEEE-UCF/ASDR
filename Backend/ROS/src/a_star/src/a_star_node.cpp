@@ -20,7 +20,7 @@ void AStarNode::onOccupancyGrid(nav_msgs::OccupancyGrid::ConstPtr const &occupan
 bool AStarNode::onAStar(a_star::a_star::Request &request, a_star::a_star::Response &response)
 {
     if (m_occupancy_grid.has_value()) {
-        nav_msgs::OccupancyGrid const occupancy_grid = m_occupancy_grid.value();
+        nav_msgs::OccupancyGrid const &occupancy_grid = m_occupancy_grid.value();
 
         std::optional<std::vector<geometry_msgs::Pose>> path;
 
