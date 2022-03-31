@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "serial_command_client_node.hpp"
 
 SerialCommandClientNode::SerialCommandClientNode(ros::NodeHandle const &node_handle) : 

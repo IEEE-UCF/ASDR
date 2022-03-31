@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "mobile_base_node.hpp"
 
 MobileBaseNode::MobileBaseNode(ros::NodeHandle const &node_handle) : 

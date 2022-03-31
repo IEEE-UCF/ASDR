@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "serial_command_client.hpp"
 
 SerialCommandClient::~SerialCommandClient()

@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "pid.hpp"
 
 PID::PID(double const &proportional_gain, double const &integral_gain, double const &derivative_gain) : 

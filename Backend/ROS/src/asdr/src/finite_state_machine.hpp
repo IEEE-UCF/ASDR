@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #pragma once
 
 #include <stdexcept>
@@ -7,13 +11,15 @@
 #include "ros/ros.h"
 #include "ros/console.h"
 
+#include "tf/transform_listener.h"
+
 #include "actionlib/client/simple_action_client.h"
 #include "move_base_msgs/MoveBaseAction.h"
 
 #include "std_srvs/Empty.h"
 #include "uvc_light/set_uvc_light.h"
-#include "coverage_path_planner/make_plan.h"
-#include "discovery/discover.h"
+#include "coverage/coverage.h"
+#include "discovery/discovery.h"
 
 #include "ros_launch_manager.hpp"
 
@@ -110,7 +116,9 @@ struct Observe : public FiniteStateMachine::State
 
 struct Explore : public FiniteStateMachine::State
 {
-    ros::ServiceClient m_discover_client;
+    ros::ServiceClient m_discovery_client;
+
+    tf::TransformListener m_transform_listener;
     
 	void entryGuard(GuardControl &control) noexcept;
 	void enter(Control &control) noexcept;
@@ -132,10 +140,10 @@ struct Disinfect : public FiniteStateMachine::State
 
 struct Navigate : public FiniteStateMachine::State
 {
-    ros::ServiceClient m_make_plan_client;
+    ros::ServiceClient m_coverage_client;
 
-    std::vector<geometry_msgs::Pose> m_plan;
-    std::vector<geometry_msgs::Pose>::const_iterator m_plan_iterator;
+    std::vector<geometry_msgs::Pose> m_path;
+    std::vector<geometry_msgs::Pose>::const_iterator m_path_iterator;
 
 	void entryGuard(GuardControl &control) noexcept;
     void enter(Control &control) noexcept;

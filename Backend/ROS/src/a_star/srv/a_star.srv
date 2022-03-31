@@ -1,0 +1,8 @@
+geometry_msgs/Pose begin
+geometry_msgs/Pose end
+float32 weight
+---
+uint8 FAILURE=0
+uint8 SUCCESS=1
+uint8 status
+geometry_msgs/Pose[] path

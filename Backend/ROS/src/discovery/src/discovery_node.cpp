@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "discovery_node.hpp"
 
 DiscoveryNode::DiscoveryNode(ros::NodeHandle const &node_handle) : 
@@ -5,7 +9,7 @@ DiscoveryNode::DiscoveryNode(ros::NodeHandle const &node_handle) :
 {
     m_occupancy_grid_subscriber = m_node_handle.subscribe(ros::names::resolve("/rtabmap/grid_map"), 1, &DiscoveryNode::onOccupancyGrid, this);
 
-    m_discover_server = m_node_handle.advertiseService(ros::names::resolve("discover"), &DiscoveryNode::onDiscover, this);
+    m_discovery_server = m_node_handle.advertiseService(ros::names::resolve("discovery"), &DiscoveryNode::onDiscovery, this);
 }
 
 void DiscoveryNode::onOccupancyGrid(nav_msgs::OccupancyGrid::ConstPtr const &occupancy_grid)
@@ -13,29 +17,24 @@ void DiscoveryNode::onOccupancyGrid(nav_msgs::OccupancyGrid::ConstPtr const &occ
     m_occupancy_grid = *occupancy_grid;
 }
 
-bool DiscoveryNode::onDiscover(discovery::discover::Request &request, discovery::discover::Response &response)
+bool DiscoveryNode::onDiscovery(discovery::discovery::Request &request, discovery::discovery::Response &response)
 {
     if (m_occupancy_grid.has_value()) {
         nav_msgs::OccupancyGrid const occupancy_grid = m_occupancy_grid.value();
 
-        tf::StampedTransform transform;
-
-        m_transform_listener.waitForTransform("/map", "/camera_link", ros::Time(0), ros::Duration(1.0));
-        m_transform_listener.lookupTransform("/map", "/camera_link", ros::Time(0), transform);
-
-        Eigen::Vector3d const transform_position(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+        Eigen::Vector3d const position(request.pose.position.x, request.pose.position.y, request.pose.position.z);
 
         Eigen::Vector3d const origin_position(occupancy_grid.info.origin.position.x, occupancy_grid.info.origin.position.y, occupancy_grid.info.origin.position.z);
         Eigen::Quaterniond const origin_orientation(occupancy_grid.info.origin.orientation.w, occupancy_grid.info.origin.orientation.x, occupancy_grid.info.origin.orientation.y, occupancy_grid.info.origin.orientation.z);
 
-        Eigen::Vector3d const position = origin_orientation.inverse() * (transform_position - origin_position);
+        Eigen::Vector3d const grid_position = origin_orientation.inverse() * (position - origin_position);
 
-        uint32_t const cell_x = static_cast<uint32_t>(position.x() / occupancy_grid.info.resolution);
-        uint32_t const cell_y = static_cast<uint32_t>(position.y() / occupancy_grid.info.resolution);
+        uint32_t const cell_x = static_cast<uint32_t>(grid_position.x() / occupancy_grid.info.resolution);
+        uint32_t const cell_y = static_cast<uint32_t>(grid_position.y() / occupancy_grid.info.resolution);
 
-        std::tuple<uint32_t, uint32_t> const cell = { cell_x, cell_y };
+        std::array<uint32_t, 2> const cell = { cell_x, cell_y };
 
-        std::optional<std::tuple<uint32_t, uint32_t>> goal;
+        std::optional<std::array<uint32_t, 2>> goal;
 
         Discovery discovery;
 
@@ -50,11 +49,8 @@ bool DiscoveryNode::onDiscover(discovery::discover::Request &request, discovery:
 
             Eigen::Vector3d const goal_position(static_cast<float>(goal_x) * occupancy_grid.info.resolution, static_cast<float>(goal_y) * occupancy_grid.info.resolution, 0.0);
 
-            Eigen::Vector3d const origin_position(occupancy_grid.info.origin.position.x, occupancy_grid.info.origin.position.y, occupancy_grid.info.origin.position.z);
-            Eigen::Quaterniond const origin_orientation(occupancy_grid.info.origin.orientation.w, occupancy_grid.info.origin.orientation.x, occupancy_grid.info.origin.orientation.y, occupancy_grid.info.origin.orientation.z);
-
             Eigen::Vector3d const pose_position = origin_orientation * goal_position + origin_position;
-            Eigen::Quaterniond const pose_orientation = origin_orientation * Eigen::AngleAxisd(std::atan2(goal_position.y() - transform_position.y(), goal_position.x() - transform_position.x()), Eigen::Vector3d::UnitZ());
+            Eigen::Quaterniond const pose_orientation = origin_orientation * Eigen::AngleAxisd(std::atan2(goal_position.y() - position.y(), goal_position.x() - position.x()), Eigen::Vector3d::UnitZ());
 
             geometry_msgs::Pose pose;
 
@@ -62,17 +58,17 @@ bool DiscoveryNode::onDiscover(discovery::discover::Request &request, discovery:
             pose.position.y = pose_position.y();
             pose.position.z = pose_position.z();
 
+            pose.orientation.w = pose_orientation.w();
             pose.orientation.x = pose_orientation.x();
             pose.orientation.y = pose_orientation.y();
             pose.orientation.z = pose_orientation.z();
-            pose.orientation.w = pose_orientation.w();
 
             response.pose = pose;
 
-            response.status = discovery::discover::Response::SUCCESS;
+            response.status = discovery::discovery::Response::SUCCESS;
         }
         else {
-            response.status = discovery::discover::Response::FAILURE;
+            response.status = discovery::discovery::Response::FAILURE;
         }
 
         return true;

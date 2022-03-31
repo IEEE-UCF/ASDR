@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "rest_node.hpp"
 
 RESTNode::RESTNode(ros::NodeHandle const &node_handle) : 

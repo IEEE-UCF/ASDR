@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "rotary_encoder_node.hpp"
 
 RotaryEncoderNode::RotaryEncoderNode(ros::NodeHandle const &node_handle) : 

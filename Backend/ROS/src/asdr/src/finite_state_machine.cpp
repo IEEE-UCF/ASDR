@@ -1,12 +1,18 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "finite_state_machine.hpp"
 
 Context::Context(ros::NodeHandle const &node_handle) : 
     m_node_handle { node_handle }, 
     m_move_base_client { new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>("move_base", true) }
 {
+    /*
     if (!m_move_base_client->waitForServer(ros::Duration(10.0))) {
         throw std::runtime_error("Failed to load move_base action client.");
     }
+    */
 }
 
 void Idle::enter(Control &control) noexcept 
@@ -155,24 +161,38 @@ void Observe::exit(Control &control) noexcept
 void Explore::entryGuard(GuardControl &control) noexcept 
 {
     try {
-        m_discover_client = control.context().m_node_handle.serviceClient<discovery::discover>("/asdr/discover");
+        m_discovery_client = control.context().m_node_handle.serviceClient<discovery::discovery>("/asdr/discovery");
 
-        discovery::discover discover_srv;
+        tf::StampedTransform transform;
 
-        if (!m_discover_client.call(discover_srv)) {
+        m_transform_listener.waitForTransform("/map", "/camera_link", ros::Time(0), ros::Duration(1.0));
+        m_transform_listener.lookupTransform("/map", "/camera_link", ros::Time(0), transform);
+
+        discovery::discovery discovery_srv;
+
+        discovery_srv.request.pose.position.x = transform.getOrigin().x();
+        discovery_srv.request.pose.position.y = transform.getOrigin().y();
+        discovery_srv.request.pose.position.z = transform.getOrigin().z();
+
+        discovery_srv.request.pose.orientation.w = transform.getRotation().getW();
+        discovery_srv.request.pose.orientation.x = transform.getRotation().getAxis().getX();
+        discovery_srv.request.pose.orientation.y = transform.getRotation().getAxis().getY();
+        discovery_srv.request.pose.orientation.z = transform.getRotation().getAxis().getZ();
+
+        if (!m_discovery_client.call(discovery_srv)) {
             throw std::runtime_error("Failed to discover.");
         }
         else {
-            if (discover_srv.response.status == discovery::discover::Response::FAILURE) {
+            if (discovery_srv.response.status == discovery::discovery::Response::FAILURE) {
                 control.changeTo<Disinfect>();
             }
-            else if (discover_srv.response.status == discovery::discover::Response::SUCCESS) {
+            else if (discovery_srv.response.status == discovery::discovery::Response::SUCCESS) {
                 move_base_msgs::MoveBaseGoal goal;
 
                 goal.target_pose.header.frame_id = "base_link";
                 goal.target_pose.header.stamp = ros::Time::now();
 
-                goal.target_pose.pose = discover_srv.response.pose;
+                goal.target_pose.pose = discovery_srv.response.pose;
                 
                 control.context().m_move_base_client->sendGoal(goal);
             }
@@ -274,30 +294,30 @@ void Disinfect::exit(Control &control) noexcept
 void Navigate::entryGuard(GuardControl &control) noexcept 
 {
     try {
-        m_make_plan_client = control.context().m_node_handle.serviceClient<coverage_path_planner::make_plan>("/asdr/make_plan");
+        m_coverage_client = control.context().m_node_handle.serviceClient<coverage::coverage>("/asdr/coverage");
 
-        coverage_path_planner::make_plan make_plan_srv;
+        coverage::coverage coverage_srv;
 
-        if (!m_make_plan_client.call(make_plan_srv)) {
-            throw std::runtime_error("Failed to make a plan.");
+        if (!m_coverage_client.call(coverage_srv)) {
+            throw std::runtime_error("Failed to make a path.");
         }
         else {
-            m_plan = make_plan_srv.response.plan;
+            m_path = coverage_srv.response.path;
 
-            m_plan_iterator = std::cbegin(m_plan);
+            m_path_iterator = std::cbegin(m_path);
 
-            if (m_plan_iterator == std::cend(m_plan)) {
-                throw std::runtime_error("Plan is empty.");
+            if (m_path_iterator == std::cend(m_path)) {
+                throw std::runtime_error("path is empty.");
             }
             else {
-                ROS_INFO_STREAM("Navigating to waypoint " << (std::distance(std::cbegin(m_plan), m_plan_iterator) + 1) << " of "  << std::size(m_plan) << ".");
+                ROS_INFO_STREAM("Navigating to waypoint " << (std::distance(std::cbegin(m_path), m_path_iterator) + 1) << " of "  << std::size(m_path) << ".");
 
                 move_base_msgs::MoveBaseGoal goal;
 
                 goal.target_pose.header.frame_id = "base_link";
                 goal.target_pose.header.stamp = ros::Time::now();
 
-                goal.target_pose.pose = *m_plan_iterator;
+                goal.target_pose.pose = *m_path_iterator;
 
                 control.context().m_move_base_client->sendGoal(goal);
             }
@@ -322,20 +342,20 @@ void Navigate::update(FullControl &control) noexcept
             throw std::runtime_error("Navigation aborted.");
         }
         else if(control.context().m_move_base_client->getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
-            m_plan_iterator = std::next(m_plan_iterator);
+            m_path_iterator = std::next(m_path_iterator);
 
-            if (m_plan_iterator == std::cend(m_plan)) {
+            if (m_path_iterator == std::cend(m_path)) {
                 control.changeTo<Idle>();
             }
             else {
-                ROS_INFO_STREAM("Navigating to waypoint " << (std::distance(std::cbegin(m_plan), m_plan_iterator) + 1) << " of "  << std::size(m_plan) << ".");
+                ROS_INFO_STREAM("Navigating to waypoint " << (std::distance(std::cbegin(m_path), m_path_iterator) + 1) << " of "  << std::size(m_path) << ".");
 
                 move_base_msgs::MoveBaseGoal goal;
 
                 goal.target_pose.header.frame_id = "base_link";
                 goal.target_pose.header.stamp = ros::Time::now();
 
-                goal.target_pose.pose = *m_plan_iterator;
+                goal.target_pose.pose = *m_path_iterator;
 
                 control.context().m_move_base_client->sendGoal(goal);
             }

@@ -1,6 +1,10 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #pragma once
 
-#include <tuple>
+#include <array>
 #include <optional>
 #include <queue>
 
@@ -9,19 +13,18 @@
 #include "ros/ros.h"
 #include "ros/console.h"
 
-#include "tf/transform_listener.h"
-
 #include "nav_msgs/OccupancyGrid.h"
 
 class Discovery
 {
     nav_msgs::OccupancyGrid m_occupancy_grid;
-    std::tuple<uint32_t, uint32_t> m_cell;
+
+    std::array<uint32_t, 2> m_cell;
 
 public:
     void setOccupancyGrid(nav_msgs::OccupancyGrid const &occupancy_grid);
 
-    void setCell(std::tuple<uint32_t, uint32_t> const &cell);
+    void setCell(std::array<uint32_t, 2> const &cell);
 
-    void compute(std::optional<std::tuple<uint32_t, uint32_t>> &goal);
+    void compute(std::optional<std::array<uint32_t, 2>> &goal);
 };

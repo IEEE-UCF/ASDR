@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #pragma once
 
 #include <pcl-1.10/pcl/filters/statistical_outlier_removal.h>
@@ -12,9 +16,7 @@
 #include "nav_msgs/OccupancyGrid.h"
 #include "geometry_msgs/Pose.h"
 
-#include "tf/transform_listener.h"
-
-#include "discovery/discover.h"
+#include "discovery/discovery.h"
 
 #include "discovery.hpp"
 
@@ -24,9 +26,7 @@ class DiscoveryNode
     
     ros::Subscriber m_occupancy_grid_subscriber;
 
-    ros::ServiceServer m_discover_server;
-
-    tf::TransformListener m_transform_listener;
+    ros::ServiceServer m_discovery_server;
 
     std::optional<nav_msgs::OccupancyGrid> m_occupancy_grid;
 
@@ -36,5 +36,5 @@ public:
 private:
     void onOccupancyGrid(nav_msgs::OccupancyGrid::ConstPtr const &occupancy_grid);
 
-    bool onDiscover(discovery::discover::Request &request, discovery::discover::Response &response);
+    bool onDiscovery(discovery::discovery::Request &request, discovery::discovery::Response &response);
 };

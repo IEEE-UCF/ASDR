@@ -9,7 +9,7 @@ find_package(PCL 1.10)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-add_service_files(FILES discover.srv)
+add_service_files(FILES discovery.srv)
 
 ## Generate added messages and services
 generate_messages(DEPENDENCIES std_msgs nav_msgs geometry_msgs sensor_msgs visualization_msgs)

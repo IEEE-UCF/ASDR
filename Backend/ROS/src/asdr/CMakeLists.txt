@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8)
 project(asdr)
 
 ## Find catkin and any catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg actionlib move_base_msgs uvc_light coverage_path_planner)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg tf actionlib move_base_msgs uvc_light coverage_path_planner)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)

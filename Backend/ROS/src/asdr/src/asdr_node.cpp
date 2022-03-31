@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "asdr_node.hpp"
 
 ASDRNode::ASDRNode(ros::NodeHandle const &node_handle) : 

@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "stepper_motor_node.hpp"
 
 StepperMotorNode::StepperMotorNode(ros::NodeHandle const &node_handle) : 

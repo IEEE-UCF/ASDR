@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "uvc_light_node.hpp"
 
 UVCLightNode::UVCLightNode(ros::NodeHandle const &node_handle) : 

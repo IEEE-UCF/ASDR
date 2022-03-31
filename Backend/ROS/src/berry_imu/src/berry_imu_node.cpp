@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "berry_imu_node.hpp"
 
 BerryIMUNode::BerryIMUNode(ros::NodeHandle const &node_handle) : 
