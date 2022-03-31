@@ -21,37 +21,30 @@
 
 #include "pid.hpp"
 
-class MobileBaseNode : public hardware_interface::RobotHW
+class MobileHardwareNode : public hardware_interface::RobotHW
 {
-    enum 
-    {
-        LEFT = 0,
-        RIGHT = 1
-    };
-
-    enum
-    {
-        FRONT = 0,
-        BACK = 1
-    };
-
     ros::NodeHandle m_node_handle;
+
+    uint32_t m_left_front_id;
+    uint32_t m_left_back_id;
+    uint32_t m_right_front_id;
+    uint32_t m_right_back_id;
 
     hardware_interface::JointStateInterface m_joint_state_interface;
     hardware_interface::VelocityJointInterface m_joint_velocity_interface;
 
-    std::array<std::array<double, 2>, 2> m_position;
-    std::array<std::array<double, 2>, 2> m_velocity;
-    std::array<std::array<double, 2>, 2> m_effort;
-    std::array<std::array<double, 2>, 2> m_command;
+    std::array<double, 4> m_position;
+    std::array<double, 4> m_velocity;
+    std::array<double, 4> m_effort;
+    std::array<double, 4> m_command;
 
-    std::array<std::array<PID, 2>, 2> m_pid;
+    std::array<std::unique_ptr<PID>, 4> m_pid;
 
-    std::array<std::array<ros::ServiceClient, 2>, 2> m_get_rotary_encoder_client;
-    std::array<std::array<ros::ServiceClient, 2>, 2> m_set_stepper_motor_client;
+    std::array<ros::ServiceClient, 4> m_get_rotary_encoder_client;
+    std::array<ros::ServiceClient, 4> m_set_stepper_motor_client;
 
 public:
-    MobileBaseNode(ros::NodeHandle const &node_handle);
+    MobileHardwareNode(ros::NodeHandle const &node_handle);
     
     void read(ros::Duration const &period);
     void write(ros::Duration const &period);

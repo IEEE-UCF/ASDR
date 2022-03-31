@@ -7,20 +7,15 @@
 SerialCommandClientNode::SerialCommandClientNode(ros::NodeHandle const &node_handle) : 
     m_node_handle { node_handle }
 {
-    std::string path_name;
+    std::string serial_port;
 
-    if (!m_node_handle.getParam("path_name", path_name)) {
-        throw std::runtime_error("path_name not provided.");
+    if (!m_node_handle.getParam("serial_port", serial_port)) {
+        throw std::runtime_error("serial_port not provided.");
     }
 
-    m_serial_command_client.open(path_name);
+    m_serial_command_client = std::unique_ptr<SerialCommandClient>(new SerialCommandClient(serial_port));
     
     m_send_command_server = m_node_handle.advertiseService(ros::names::resolve("send_command"), &SerialCommandClientNode::onSendCommand, this);
-}
-
-SerialCommandClientNode::~SerialCommandClientNode()
-{
-    m_serial_command_client.close();
 }
 
 bool SerialCommandClientNode::onSendCommand(serial_command_client::send_command::Request &request, serial_command_client::send_command::Response &response)
@@ -34,7 +29,7 @@ bool SerialCommandClientNode::onSendCommand(serial_command_client::send_command:
 
     std::memcpy(&serial_command_request.buffer[0], &request.buffer[0], std::size(request.buffer));
 
-    if (m_serial_command_client.sendCommand(serial_command_request, serial_command_response)) {
+    if (m_serial_command_client->sendCommand(serial_command_request, serial_command_response)) {
         response.status = serial_command_response.status;
 
         response.buffer.resize(serial_command_response.size);

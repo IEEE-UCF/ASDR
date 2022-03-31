@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
 
 #include "serial/serial.h"
@@ -31,13 +30,11 @@ struct SerialCommandResponse
 
 class SerialCommandClient
 {
-    std::unique_ptr<serial::Serial> m_serial;
+    serial::Serial m_serial;
     
 public:
+    SerialCommandClient(std::string const &serial_port);
     ~SerialCommandClient();
-
-    void open(std::string const &path_name);
-    void close();
 
     bool sendCommand(SerialCommandRequest const &request, SerialCommandResponse &response);
 };

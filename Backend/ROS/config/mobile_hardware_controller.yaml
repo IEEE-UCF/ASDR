@@ -1,4 +1,4 @@
-mobile_base_controller:
+mobile_hardware_controller:
   type: "diff_drive_controller/DiffDriveController"
   left_wheel: [ "left_front", "left_back" ]
   right_wheel: [ "right_front", "right_back" ]

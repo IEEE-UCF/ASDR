@@ -6,6 +6,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <memory>
 
 #include "ros/ros.h"
 #include "ros/console.h"
@@ -20,11 +21,10 @@ class SerialCommandClientNode
 
     ros::ServiceServer m_send_command_server;
 
-    SerialCommandClient m_serial_command_client;
+    std::unique_ptr<SerialCommandClient> m_serial_command_client;
 
 public:
     SerialCommandClientNode(ros::NodeHandle const &node_handle);
-    ~SerialCommandClientNode();
 
 private:
     bool onSendCommand(serial_command_client::send_command::Request &request, serial_command_client::send_command::Response &response);

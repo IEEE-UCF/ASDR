@@ -1,32 +1,41 @@
 <launch>
     <!--arg name="serial_port" default="/dev/ttyUSB0"/>
+    <arg name="left_front_id" default="0"/>
+    <arg name="left_back_id" default="1"/>
+    <arg name="right_front_id" default="2"/>
+    <arg name="right_back_id" default="3"/>
+    <arg name="proportional_gain" default="0.1"/>
+    <arg name="integral_gain" default="0.05"/>
+    <arg name="derivative_gain" default="0.01"/>
+    <arg name="extrude_distance" default="-1.0"/>
+    <arg name="slice_spacing" default="0.5"/>
     <group ns="$(arg serial_port)">
         <node pkg="serial_command_client" type="serial_command_client_node" name="serial_command_client_node" output="screen">
-            <param name="path_name" type="string" value="$(arg serial_port)"/>
+            <param name="serial_port" type="string" value="$(arg serial_port)"/>
         </node>
         <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_0" output="screen">
-            <param name="rotary_encoder_id" type="int" value="0"/>
+            <param name="rotary_encoder_id" type="int" value="$(arg left_front_id)"/>
         </node>
         <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_1" output="screen">
-            <param name="rotary_encoder_id" type="int" value="1"/>
+            <param name="rotary_encoder_id" type="int" value="$(arg left_back_id)"/>
         </node>
         <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_2" output="screen">
-            <param name="rotary_encoder_id" type="int" value="2"/>
+            <param name="rotary_encoder_id" type="int" value="$(arg right_front_id)"/>
         </node>
         <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_3" output="screen">
-            <param name="rotary_encoder_id" type="int" value="3"/>
+            <param name="rotary_encoder_id" type="int" value="$(arg right_back_id)"/>
         </node>
         <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_0" output="screen">
-            <param name="stepper_motor_id" type="int" value="0"/>
+            <param name="stepper_motor_id" type="int" value="$(arg left_front_id)"/>
         </node>
         <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_1" output="screen">
-            <param name="stepper_motor_id" type="int" value="1"/>
+            <param name="stepper_motor_id" type="int" value="$(arg left_back_id)"/>
         </node>
         <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_2" output="screen">
-            <param name="stepper_motor_id" type="int" value="2"/>
+            <param name="stepper_motor_id" type="int" value="$(arg right_front_id)"/>
         </node>
         <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_3" output="screen">
-            <param name="stepper_motor_id" type="int" value="3"/>
+            <param name="stepper_motor_id" type="int" value="$(arg right_back_id)"/>
         </node>
         <node pkg="berry_imu" type="berry_imu_node" name="berry_imu_node" output="screen"/>
         <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node">
@@ -36,68 +45,26 @@
             <param name="world_frame" type="string" value="enu"/>
         </node>
         <node pkg="uvc_light" type="uvc_light_node" name="uvc_light_node"/>
-    </group-->
-
-    <arg name="serial_port_0" default="/dev/ttyUSB0"/>
-    <arg name="serial_port_1" default="/dev/ttyUSB1"/>
-    <arg name="serial_port_2" default="/dev/ttyUSB2"/>
-    <!--group ns="$(arg serial_port_0)">
-        <node pkg="serial_command_client" type="serial_command_client_node" name="serial_command_client_node" output="screen">
-            <param name="path_name" type="string" value="$(arg serial_port_0)"/>
-        </node>
-        <node pkg="berry_imu" type="berry_imu_node" name="berry_imu_node" output="screen"/>
-        <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node">
-            <param name="use_magnetic_field_msg" type="bool" value="true"/>
-            <param name="use_mag" type="bool" value="true"/>
-            <param name="publish_tf" type="bool" value="false"/>
-            <param name="world_frame" type="string" value="enu"/>
-        </node>
-        <node pkg="uvc_light" type="uvc_light_node" name="uvc_light_node"/>
-    </group-->
-    <!--group ns="$(arg serial_port_1)">
-        <node pkg="serial_command_client" type="serial_command_client_node" name="serial_command_client_node" output="screen">
-            <param name="path_name" type="string" value="$(arg serial_port_1)"/>
-        </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node" output="screen">
-            <param name="rotary_encoder_id" type="int" value="0"/>
-        </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node" output="screen">
-            <param name="rotary_encoder_id" type="int" value="1"/>
-        </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node" output="screen">
-            <param name="stepper_motor_id" type="int" value="0"/>
-        </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node" output="screen">
-            <param name="stepper_motor_id" type="int" value="1"/>
-        </node>
-    </group>
-    <group ns="$(arg serial_port_2)">
-        <node pkg="serial_command_client" type="serial_command_client_node" name="serial_command_client_node" output="screen">
-            <param name="path_name" type="string" value="$(arg serial_port_2)"/>
-        </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node" output="screen">
-            <param name="rotary_encoder_id" type="int" value="0"/>
-        </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node" output="screen">
-            <param name="rotary_encoder_id" type="int" value="1"/>
-        </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node" output="screen">
-            <param name="stepper_motor_id" type="int" value="0"/>
-        </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node" output="screen">
-            <param name="stepper_motor_id" type="int" value="1"/>
-        </node>
     </group-->
     <group ns="asdr">
-        <rosparam command="load" file="config/mobile_base_controller.yaml"/>
-        <!--node pkg="mobile_base" type="mobile_base_node" name="mobile_base_node"/>
-        <node pkg="controller_manager" type="spawner" name="controller_manager_node" respawn="false" output="screen" args="mobile_base_controller"/-->
+        <rosparam command="load" file="config/mobile_hardware_controller.yaml"/>
+        <!--node pkg="mobile_hardware" type="mobile_hardware_node" name="mobile_hardware_node">
+            <param name="proportional_gain" type="double" value="$(arg proportional_gain)"/>
+            <param name="integral_gain" type="double" value="$(arg integral_gain)"/>
+            <param name="derivative_gain" type="double" value="$(arg derivative_gain)"/>
+            <param name="serial_port" type="string" value="$(arg serial_port)"/>
+            <param name="left_front_id" type="int" value="$(arg left_front_id)"/>
+            <param name="left_back_id" type="int" value="$(arg left_back_id)"/>
+            <param name="right_front_id" type="int" value="$(arg right_front_id)"/>
+            <param name="right_back_id" type="int" value="$(arg right_back_id)"/>
+        </node>
+        <node pkg="controller_manager" type="spawner" name="controller_manager_node" respawn="false" output="screen" args="mobile_hardware_controller"/-->
         <node pkg="asdr" type="asdr_node" name="asdr_node" output="screen"/>
         <node pkg="rest" type="rest_node" name="rest_node" output="screen"/>
         <node pkg="discovery" type="discovery_node" name="discovery_node" output="screen"/>
         <node pkg="coverage_path_planner" type="coverage_path_planner_node" name="coverage_path_planner_node" output="screen">
-            <param name="extrude_distance" type="double" value="-1.0"/>
-            <param name="slice_spacing" type="double" value="0.5"/>
+            <param name="extrude_distance" type="double" value="$(arg extrude_distance)"/>
+            <param name="slice_spacing" type="double" value="$(arg slice_spacing)"/>
         </node>
     </group>
 </launch>
