@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "berry_imu.hpp"
 
 BerryIMU::BerryIMU(int32_t const &FS_G, int32_t const &FS_XL, int32_t const &FS_M) : m_FS_G(FS_G), m_FS_XL(FS_XL), m_FS_M(FS_M)

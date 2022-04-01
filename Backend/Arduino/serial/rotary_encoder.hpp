@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #pragma once
 
 #include <Arduino.h>

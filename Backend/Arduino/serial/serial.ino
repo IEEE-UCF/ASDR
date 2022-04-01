@@ -1,14 +1,22 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "serial_command_server.hpp"
 #include "berry_imu.hpp"
 #include "rotary_encoder.hpp"
 #include "stepper_motor.hpp"
 
-SerialCommandServer serial_command_server;
+enum 
+{
+    BERRY_IMU_READ_COMMAND = 0,
+    UVC_LIGHT_WRITE_COMMAND,
+    ROTARY_ENCODER_READ_COMMAND,
+    STEPPER_MOTOR_WRITE_COMMAND,
+    MAX_COMMANDS
+};
 
-uint8_t const BERRY_IMU_READ_COMMAND = 0;
-uint8_t const UVC_LIGHT_WRITE_COMMAND = 1;
-uint8_t const ROTARY_ENCODER_READ_COMMAND = 2;
-uint8_t const STEPPER_MOTOR_WRITE_COMMAND = 3;
+SerialCommandServer<MAX_COMMANDS> serial_command_server;
 
 BerryIMU berry_imu;
 

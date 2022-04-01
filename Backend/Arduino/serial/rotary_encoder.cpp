@@ -1,3 +1,7 @@
+/*
+ * Copyright 2022 Casey Sanchez
+ */
+
 #include "rotary_encoder.hpp"
 
 RotaryEncoder::RotaryEncoder(uint8_t const &pin_1, uint8_t const &pin_2, uint32_t const &steps_per_revolution) :
