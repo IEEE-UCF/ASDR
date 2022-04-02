@@ -45,15 +45,14 @@ public:
         if (m_num_commands >= MAX_COMMANDS) {
             return false;
         }
-      
-        size_t const index = m_num_commands;
-      
-        m_serial_commands[index].command = command;
-        m_serial_commands[index].callback = callback;
-      
-        m_num_commands++;
-      
-        return true;
+        else {
+            size_t const index = m_num_commands++;
+          
+            m_serial_commands[index].command = command;
+            m_serial_commands[index].callback = callback;
+          
+            return true;
+        }
     }
     
     void enable()

@@ -14,6 +14,8 @@
 
 #include "serial_command_client/send_command.h"
 
+#include "serial_commands.hpp"
+
 class UVCLightNode
 {
     ros::NodeHandle m_node_handle;

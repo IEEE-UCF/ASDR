@@ -16,7 +16,7 @@
 #include "asdr/get_state.h"
 #include "asdr/set_velocity.h"
 
-#include "finite_state_machine.hpp"
+#include "asdr.hpp"
 
 class ASDRNode
 {

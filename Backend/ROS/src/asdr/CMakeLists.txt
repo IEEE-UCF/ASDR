@@ -21,7 +21,7 @@ include_directories(include HFSM2/include ${catkin_INCLUDE_DIRS})
 
 # %Tag(SRVCLIENT)%
 
-add_executable(asdr_node src/asdr_node.cpp src/finite_state_machine.cpp)
+add_executable(asdr_node src/asdr_node.cpp src/asdr.cpp)
 target_link_libraries(asdr_node ${catkin_LIBRARIES} Threads::Threads)
 add_dependencies(asdr_node asdr_gencpp ${catkin_EXPORTED_TARGETS})
 set_property(TARGET asdr_node PROPERTY CXX_STANDARD 17)

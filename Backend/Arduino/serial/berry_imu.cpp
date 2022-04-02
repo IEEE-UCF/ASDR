@@ -89,10 +89,8 @@ void BerryIMU::read(uint8_t const &device, uint8_t const &address, size_t const 
 
     Wire.requestFrom(device, size); 
 
-    uint32_t index = 0;
-
-    while (Wire.available()) { 
-        buffer[index++] = Wire.read(); 
+    for (size_t index = 0; Wire.available(); ++index) {
+        buffer[index] = Wire.read();
     }
 
     Wire.endTransmission(); 

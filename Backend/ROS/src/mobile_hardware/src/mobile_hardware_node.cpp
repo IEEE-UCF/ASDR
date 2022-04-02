@@ -68,8 +68,6 @@ MobileHardwareNode::MobileHardwareNode(ros::NodeHandle const &node_handle) :
     }
 
     {
-        m_pid[m_left_front_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
-
         hardware_interface::JointStateHandle joint_state_handle("left_front", &m_position[m_left_front_id], &m_velocity[m_left_front_id], &m_effort[m_left_front_id]);
         hardware_interface::JointHandle joint_velocity_handle(joint_state_handle, &m_command[m_left_front_id]);
 
@@ -78,8 +76,6 @@ MobileHardwareNode::MobileHardwareNode(ros::NodeHandle const &node_handle) :
     }
 
     {
-        m_pid[m_left_back_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
-
         hardware_interface::JointStateHandle joint_state_handle("left_back", &m_position[m_left_back_id], &m_velocity[m_left_back_id], &m_effort[m_left_back_id]);
         hardware_interface::JointHandle joint_velocity_handle(joint_state_handle, &m_command[m_left_back_id]);
 
@@ -88,8 +84,6 @@ MobileHardwareNode::MobileHardwareNode(ros::NodeHandle const &node_handle) :
     }
 
     {
-        m_pid[m_right_front_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
-
         hardware_interface::JointStateHandle joint_state_handle("right_front", &m_position[m_right_front_id], &m_velocity[m_right_front_id], &m_effort[m_right_front_id]);
         hardware_interface::JointHandle joint_velocity_handle(joint_state_handle, &m_command[m_right_front_id]);
 
@@ -98,8 +92,6 @@ MobileHardwareNode::MobileHardwareNode(ros::NodeHandle const &node_handle) :
     }
 
     {
-        m_pid[m_right_back_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
-
         hardware_interface::JointStateHandle joint_state_handle("right_back", &m_position[m_right_back_id], &m_velocity[m_right_back_id], &m_effort[m_right_back_id]);
         hardware_interface::JointHandle joint_velocity_handle(joint_state_handle, &m_command[m_right_back_id]);
 
@@ -109,6 +101,11 @@ MobileHardwareNode::MobileHardwareNode(ros::NodeHandle const &node_handle) :
 
     hardware_interface::RobotHW::registerInterface(&m_joint_state_interface);
     hardware_interface::RobotHW::registerInterface(&m_joint_velocity_interface);
+
+    m_pid[m_left_front_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
+    m_pid[m_left_back_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
+    m_pid[m_right_front_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
+    m_pid[m_right_back_id] = std::unique_ptr<PID>(new PID(proportional_gain, integral_gain, derivative_gain));
 
     m_get_rotary_encoder_client[m_left_front_id] = m_node_handle.serviceClient<rotary_encoder::get_rotary_encoder>(ros::names::resolve(serial_port + "/" + std::to_string(m_left_front_id) + "/get_rotary_encoder"));
     m_get_rotary_encoder_client[m_left_back_id] = m_node_handle.serviceClient<rotary_encoder::get_rotary_encoder>(ros::names::resolve(serial_port + "/" + std::to_string(m_left_back_id) + "/get_rotary_encoder"));

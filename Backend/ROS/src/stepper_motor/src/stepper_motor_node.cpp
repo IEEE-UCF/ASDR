@@ -22,11 +22,9 @@ StepperMotorNode::StepperMotorNode(ros::NodeHandle const &node_handle) :
 
 bool StepperMotorNode::onSetStepperMotor(stepper_motor::set_stepper_motor::Request &request, stepper_motor::set_stepper_motor::Response &response)
 {
-    static uint8_t const STEPPER_MOTOR_COMMAND = 1;
-
     serial_command_client::send_command send_command_srv;
 
-    send_command_srv.request.command = STEPPER_MOTOR_COMMAND;
+    send_command_srv.request.command = STEPPER_MOTOR_WRITE_COMMAND;
 
     send_command_srv.request.buffer.resize(sizeof(uint32_t) + sizeof(float));
 

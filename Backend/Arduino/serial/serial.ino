@@ -7,16 +7,12 @@
 #include "rotary_encoder.hpp"
 #include "stepper_motor.hpp"
 
-enum 
-{
-    BERRY_IMU_READ_COMMAND = 0,
-    UVC_LIGHT_WRITE_COMMAND,
-    ROTARY_ENCODER_READ_COMMAND,
-    STEPPER_MOTOR_WRITE_COMMAND,
-    MAX_COMMANDS
-};
+uint8_t constexpr BERRY_IMU_READ_COMMAND = 0;
+uint8_t constexpr UVC_LIGHT_WRITE_COMMAND = 1;
+uint8_t constexpr ROTARY_ENCODER_READ_COMMAND = 2;
+uint8_t constexpr STEPPER_MOTOR_WRITE_COMMAND = 3;
 
-SerialCommandServer<MAX_COMMANDS> serial_command_server;
+SerialCommandServer<4> serial_command_server;
 
 BerryIMU berry_imu;
 

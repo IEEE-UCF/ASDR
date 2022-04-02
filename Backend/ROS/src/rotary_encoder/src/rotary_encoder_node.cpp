@@ -22,11 +22,9 @@ RotaryEncoderNode::RotaryEncoderNode(ros::NodeHandle const &node_handle) :
 
 bool RotaryEncoderNode::onGetRotaryEncoder(rotary_encoder::get_rotary_encoder::Request &request, rotary_encoder::get_rotary_encoder::Response &response)
 {
-    static uint8_t const ROTARY_ENCODER_COMMAND = 0;
-
     serial_command_client::send_command send_command_srv;
 
-    send_command_srv.request.command = ROTARY_ENCODER_COMMAND;
+    send_command_srv.request.command = ROTARY_ENCODER_READ_COMMAND;
 
     send_command_srv.request.buffer.resize(sizeof(uint32_t));
 

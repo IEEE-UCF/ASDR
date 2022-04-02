@@ -15,11 +15,9 @@ BerryIMUNode::BerryIMUNode(ros::NodeHandle const &node_handle) :
 
 void BerryIMUNode::publish()
 {
-    static uint8_t const BERRY_IMU_COMMAND = 0;
-
     serial_command_client::send_command send_command_srv;
 
-    send_command_srv.request.command = BERRY_IMU_COMMAND;
+    send_command_srv.request.command = BERRY_IMU_READ_COMMAND;
 
     if (!m_send_command_client.call(send_command_srv)) {
         throw std::runtime_error("Failed to call send_command.");

@@ -7,8 +7,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "LSM6DSL.h"
-#include "LIS3MDL.h"
+#include "LSM6DSL.hpp"
+#include "LIS3MDL.hpp"
 
 enum {
   	FS_G_250 = 0,

@@ -14,11 +14,9 @@ UVCLightNode::UVCLightNode(ros::NodeHandle const &node_handle) :
 
 bool UVCLightNode::onSetUVCLight(uvc_light::set_uvc_light::Request &request, uvc_light::set_uvc_light::Response &response)
 {
-    static uint8_t const UVC_LIGHT_COMMAND = 1;
-
     serial_command_client::send_command send_command_srv;
 
-    send_command_srv.request.command = UVC_LIGHT_COMMAND;
+    send_command_srv.request.command = UVC_LIGHT_WRITE_COMMAND;
 
     send_command_srv.request.buffer.resize(sizeof(uint8_t));
 
