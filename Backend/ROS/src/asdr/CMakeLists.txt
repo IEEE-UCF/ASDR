@@ -17,7 +17,7 @@ generate_messages(DEPENDENCIES std_msgs)
 catkin_package()
 
 ## Build talker and listener
-include_directories(include HFSM2/include ${catkin_INCLUDE_DIRS})
+include_directories(include ../../../HFSM2/include ${catkin_INCLUDE_DIRS})
 
 # %Tag(SRVCLIENT)%
 

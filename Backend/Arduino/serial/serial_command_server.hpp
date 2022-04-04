@@ -40,6 +40,13 @@ class SerialCommandServer
     size_t m_num_commands = 0;
   
 public:
+    SerialCommandServer()
+    {
+        Serial.begin(115200);
+      
+        while (!Serial);
+    }
+
     bool registerCommand(uint8_t const &command, uint8_t (*callback)(uint8_t const &, uint8_t const *, uint8_t &, uint8_t *))
     {
         if (m_num_commands >= MAX_COMMANDS) {
@@ -53,13 +60,6 @@ public:
           
             return true;
         }
-    }
-    
-    void enable()
-    {  
-        Serial.begin(115200);
-      
-        while (!Serial);
     }
     
     void listen()

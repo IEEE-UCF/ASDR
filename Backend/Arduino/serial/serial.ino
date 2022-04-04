@@ -102,10 +102,6 @@ void setup()
     serial_command_server.registerCommand(UVC_LIGHT_WRITE_COMMAND, &uvc_light_write);
     serial_command_server.registerCommand(ROTARY_ENCODER_READ_COMMAND, &rotary_encoder_read); 
     serial_command_server.registerCommand(STEPPER_MOTOR_WRITE_COMMAND, &stepper_motor_write); 
-    
-    serial_command_server.enable();
-    
-    berry_imu.enable();
 }
 
 void loop() 

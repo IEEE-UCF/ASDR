@@ -82,8 +82,6 @@ class BerryIMU
 public:
   	BerryIMU(int32_t const &FS_G = FS_G_2000, int32_t const &FS_XL = FS_XL_16, int32_t const &FS_M = FS_M_16);
   
-    void enable();
-  
   	// Convert to SI units [mdeg/sec]->[rad/sec]
   	void readGyr(float gyr[3]);
   	// Convert to SI units [mG]->[m/s^2]

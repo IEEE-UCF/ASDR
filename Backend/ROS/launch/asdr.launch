@@ -1,5 +1,5 @@
 <launch>
-    <!--arg name="serial_port" default="/dev/ttyUSB0"/>
+    <arg name="serial_port" default="/dev/ttyUSB0"/>
     <arg name="left_front_id" default="0"/>
     <arg name="left_back_id" default="1"/>
     <arg name="right_front_id" default="2"/>
@@ -9,32 +9,32 @@
     <arg name="derivative_gain" default="0.01"/>
     <arg name="extrude_distance" default="-1.0"/>
     <arg name="slice_spacing" default="0.5"/>
-    <group ns="$(arg serial_port)">
+    <!--group ns="$(arg serial_port)">
         <node pkg="serial_command_client" type="serial_command_client_node" name="serial_command_client_node" output="screen">
             <param name="serial_port" type="string" value="$(arg serial_port)"/>
         </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_0" output="screen">
+        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_$(arg left_front_id)" output="screen">
             <param name="rotary_encoder_id" type="int" value="$(arg left_front_id)"/>
         </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_1" output="screen">
+        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_$(arg left_back_id)" output="screen">
             <param name="rotary_encoder_id" type="int" value="$(arg left_back_id)"/>
         </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_2" output="screen">
+        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_$(arg right_front_id)" output="screen">
             <param name="rotary_encoder_id" type="int" value="$(arg right_front_id)"/>
         </node>
-        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_3" output="screen">
+        <node pkg="rotary_encoder" type="rotary_encoder_node" name="rotary_encoder_node_$(arg right_back_id)" output="screen">
             <param name="rotary_encoder_id" type="int" value="$(arg right_back_id)"/>
         </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_0" output="screen">
+        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_$(arg left_front_id)" output="screen">
             <param name="stepper_motor_id" type="int" value="$(arg left_front_id)"/>
         </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_1" output="screen">
+        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_$(arg left_back_id)" output="screen">
             <param name="stepper_motor_id" type="int" value="$(arg left_back_id)"/>
         </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_2" output="screen">
+        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_$(arg right_front_id)" output="screen">
             <param name="stepper_motor_id" type="int" value="$(arg right_front_id)"/>
         </node>
-        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_3" output="screen">
+        <node pkg="stepper_motor" type="stepper_motor_node" name="stepper_motor_node_$(arg right_back_id)" output="screen">
             <param name="stepper_motor_id" type="int" value="$(arg right_back_id)"/>
         </node>
         <node pkg="berry_imu" type="berry_imu_node" name="berry_imu_node" output="screen"/>
@@ -62,7 +62,7 @@
         <node pkg="asdr" type="asdr_node" name="asdr_node" output="screen"/>
         <node pkg="rest" type="rest_node" name="rest_node" output="screen"/>
         <node pkg="discovery" type="discovery_node" name="discovery_node" output="screen"/>
-        <node pkg="coverage_path_planner" type="coverage_path_planner_node" name="coverage_path_planner_node" output="screen">
+        <node pkg="coverage" type="coverage_node" name="coverage_node" output="screen">
             <param name="extrude_distance" type="double" value="$(arg extrude_distance)"/>
             <param name="slice_spacing" type="double" value="$(arg slice_spacing)"/>
         </node>

@@ -8,20 +8,20 @@ ASDRNode::ASDRNode(ros::NodeHandle const &node_handle) :
     m_node_handle { node_handle },
     m_finite_state_machine { { node_handle } }
 {
-    if (!m_node_handle.getParam("/asdr/mobile_base_controller/linear/x/max_velocity", m_max_linear_velocity)) {
-        throw std::runtime_error("/asdr/mobile_base_controller/linear/x/max_velocity not provided.");
+    if (!m_node_handle.getParam("/asdr/mobile_hardware_controller/linear/x/max_velocity", m_max_linear_velocity)) {
+        throw std::runtime_error("/asdr/mobile_hardware_controller/linear/x/max_velocity not provided.");
     }
     
-    if (!m_node_handle.getParam("/asdr/mobile_base_controller/linear/x/min_velocity", m_min_linear_velocity)) {
-        throw std::runtime_error("/asdr/mobile_base_controller/linear/x/min_velocity not provided.");
+    if (!m_node_handle.getParam("/asdr/mobile_hardware_controller/linear/x/min_velocity", m_min_linear_velocity)) {
+        throw std::runtime_error("/asdr/mobile_hardware_controller/linear/x/min_velocity not provided.");
     }
 
-    if (!m_node_handle.getParam("/asdr/mobile_base_controller/angular/z/max_velocity", m_max_angular_velocity)) {
-        throw std::runtime_error("/asdr/mobile_base_controller/angular/z/max_velocity not provided.");
+    if (!m_node_handle.getParam("/asdr/mobile_hardware_controller/angular/z/max_velocity", m_max_angular_velocity)) {
+        throw std::runtime_error("/asdr/mobile_hardware_controller/angular/z/max_velocity not provided.");
     }
     
-    if (!m_node_handle.getParam("/asdr/mobile_base_controller/angular/z/min_velocity", m_min_angular_velocity)) {
-        throw std::runtime_error("/asdr/mobile_base_controller/angular/z/min_velocity not provided.");
+    if (!m_node_handle.getParam("/asdr/mobile_hardware_controller/angular/z/min_velocity", m_min_angular_velocity)) {
+        throw std::runtime_error("/asdr/mobile_hardware_controller/angular/z/min_velocity not provided.");
     }
 
     m_get_state_server = m_node_handle.advertiseService(ros::names::resolve("get_state"), &ASDRNode::onGetState, this);

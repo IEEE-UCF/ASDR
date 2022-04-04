@@ -62,15 +62,15 @@ using FiniteStateMachine = Machine::PeerRoot<
 
 struct Idle : public FiniteStateMachine::State 
 {
-	void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void enter(Control &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
 
 struct Manual : public FiniteStateMachine::State
 {
-	void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void enter(Control &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
 
@@ -81,9 +81,9 @@ struct Automatic : public FiniteStateMachine::State
     pid_t m_realsense_pid;
     pid_t m_rtabmap_pid;
 
-	void entryGuard(GuardControl &control) noexcept;
+    void entryGuard(GuardControl &control) noexcept;
     void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exitGuard(GuardControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
@@ -93,8 +93,8 @@ struct Delay : public FiniteStateMachine::State
     ros::Time m_start;
     ros::Duration m_delay;
 
-	void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void enter(Control &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
 
@@ -102,15 +102,15 @@ struct Map : public FiniteStateMachine::State
 {
     ros::ServiceClient m_set_mode_mapping_client;
 
-	void entryGuard(GuardControl &control) noexcept;
+    void entryGuard(GuardControl &control) noexcept;
     void enter(Control &control) noexcept;
     void exit(Control &control) noexcept;
 };
 
 struct Observe : public FiniteStateMachine::State
 {
-	void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void enter(Control &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
 
@@ -119,10 +119,10 @@ struct Explore : public FiniteStateMachine::State
     ros::ServiceClient m_discovery_client;
 
     tf::TransformListener m_transform_listener;
-    
-	void entryGuard(GuardControl &control) noexcept;
-	void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+
+    void entryGuard(GuardControl &control) noexcept;
+    void enter(Control &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
 
@@ -131,9 +131,9 @@ struct Disinfect : public FiniteStateMachine::State
     ros::ServiceClient m_set_mode_localization_client;
     ros::ServiceClient m_set_uvc_light_client;
 
-	void entryGuard(GuardControl &control) noexcept;
+    void entryGuard(GuardControl &control) noexcept;
     void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exitGuard(GuardControl &control) noexcept;
     void exit(Control &control) noexcept;
 };
@@ -145,8 +145,8 @@ struct Navigate : public FiniteStateMachine::State
     std::vector<geometry_msgs::Pose> m_path;
     std::vector<geometry_msgs::Pose>::const_iterator m_path_iterator;
 
-	void entryGuard(GuardControl &control) noexcept;
+    void entryGuard(GuardControl &control) noexcept;
     void enter(Control &control) noexcept;
-	void update(FullControl &control) noexcept;
+    void update(FullControl &control) noexcept;
     void exit(Control &control) noexcept;
 };

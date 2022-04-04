@@ -23,7 +23,7 @@ bool UVCLightNode::onSetUVCLight(uvc_light::set_uvc_light::Request &request, uvc
     std::memcpy(&send_command_srv.request.buffer[0], &request.state, sizeof(uint8_t));
 
     if (m_send_command_client.call(send_command_srv)) {
-        if (send_command_srv.response.status == serial_command_client::send_command::Response::SUCCESS) {
+        if (send_command_srv.response.status == serial_command_client::send_command::Response::SUCCESS && std::size(send_command_srv.response.buffer) == 0) {
             return true;
         }
     }

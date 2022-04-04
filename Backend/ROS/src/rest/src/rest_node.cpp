@@ -25,9 +25,9 @@ RESTNode::~RESTNode()
 
 void RESTNode::onGet(web::http::http_request const &request)
 {
-    std::vector<utility::string_t> const paths = web::uri::split_path(web::uri::decode(request.relative_uri().path()));
+    std::vector<utility::string_t> const path = web::uri::split_path(web::uri::decode(request.relative_uri().path()));
 
-    if (paths[0] == "get_state") {
+    if (path[0] == "get_state") {
         asdr::get_state get_state_srv;
 
         if (m_get_state_client.call(get_state_srv)) {
@@ -39,7 +39,6 @@ void RESTNode::onGet(web::http::http_request const &request)
             response.set_body(get_state_srv.response.state);
 
             request.reply(response);
-
         }
         else {
             web::http::http_response response(web::http::status_codes::InternalError);
@@ -62,14 +61,14 @@ void RESTNode::onGet(web::http::http_request const &request)
 
 void RESTNode::onPost(web::http::http_request const &request)
 {
-    std::vector<utility::string_t> const paths = web::uri::split_path(web::uri::decode(request.relative_uri().path()));
+    std::vector<utility::string_t> const path = web::uri::split_path(web::uri::decode(request.relative_uri().path()));
 
     std::map<utility::string_t, utility::string_t> const query = web::uri::split_query(web::uri::decode(request.request_uri().query()));
 
-    if (paths[0] == "set_state") {
-        asdr::set_state set_state_srv;
-
+    if (path[0] == "set_state") {
         try {
+            asdr::set_state set_state_srv;
+
             set_state_srv.request.state = query.at("state");
 
             if (m_set_state_client.call(set_state_srv)) {
@@ -98,10 +97,10 @@ void RESTNode::onPost(web::http::http_request const &request)
             request.reply(response);
         }
     }
-    else if (paths[0] == "set_velocity") {
-        asdr::set_velocity set_velocity_srv;
-
+    else if (path[0] == "set_velocity") {
         try {
+            asdr::set_velocity set_velocity_srv;
+
             set_velocity_srv.request.linear = std::stod(query.at("linear"));
             set_velocity_srv.request.angular = std::stod(query.at("angular"));
 

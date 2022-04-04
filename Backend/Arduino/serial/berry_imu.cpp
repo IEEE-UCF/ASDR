@@ -7,10 +7,7 @@
 BerryIMU::BerryIMU(int32_t const &FS_G, int32_t const &FS_XL, int32_t const &FS_M) : m_FS_G(FS_G), m_FS_XL(FS_XL), m_FS_M(FS_M)
 {
     Wire.begin();
-}
 
-void BerryIMU::enable()
-{
     //Enable  gyroscope
     write(LSM6DSL_ADDRESS, LSM6DSL_CTRL2_G, 0b10010000 | (FS_G_bits[m_FS_G] << 2));
 
