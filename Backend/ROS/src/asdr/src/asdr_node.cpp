@@ -27,6 +27,7 @@ ASDRNode::ASDRNode(ros::NodeHandle const &node_handle) :
     m_get_state_server = m_node_handle.advertiseService(ros::names::resolve("get_state"), &ASDRNode::onGetState, this);
     m_set_state_server = m_node_handle.advertiseService(ros::names::resolve("set_state"), &ASDRNode::onSetState, this);
     m_set_velocity_server = m_node_handle.advertiseService(ros::names::resolve("set_velocity"), &ASDRNode::onSetVelocity, this);
+    m_get_image_server = m_node_handle.advertiseService(ros::names::resolve("get_image"), &ASDRNode::onGetImage, this);
 
     m_cmd_vel_publisher = m_node_handle.advertise<geometry_msgs::Twist>(ros::names::resolve("cmd_vel"), 100);
 }
@@ -133,6 +134,29 @@ bool ASDRNode::onSetVelocity(asdr::set_velocity::Request &request, asdr::set_vel
     }
     
     return false;
+}
+
+bool ASDRNode::onGetImage(asdr::get_image::Request &request, asdr::get_image::Response &response)
+{
+    nav_msgs::OccupancyGrid const occupancy_grid;
+
+    size_t const size = occupancy_grid.info.width * occupancy_grid.info.height;
+
+    response.width = occupancy_grid.info.width;
+    response.height = occupancy_grid.info.height;
+
+    response.image.resize(size * 4);
+
+    for (size_t index = 0; index < size; ++index) {
+        uint32_t const rgba = occupancy_grid.data[index] == 0 ? 0xc1c1c1ff : (occupancy_grid.data[index] == -1 ? 0x5d6e6cff : 0x0e0e0eff);
+
+        response.image[index * 4 + 0] = (rgba & 0xff000000) >> 24;
+        response.image[index * 4 + 1] = (rgba & 0x00ff0000) >> 16;
+        response.image[index * 4 + 2] = (rgba & 0x0000ff00) >> 8;
+        response.image[index * 4 + 3] = (rgba & 0x000000ff);
+    }
+
+    return true;
 }
 
 int main(int argc, char **argv)

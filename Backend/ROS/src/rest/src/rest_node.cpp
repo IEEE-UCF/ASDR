@@ -11,6 +11,7 @@ RESTNode::RESTNode(ros::NodeHandle const &node_handle) :
     m_get_state_client = m_node_handle.serviceClient<asdr::get_state>(ros::names::resolve("get_state"));
     m_set_state_client = m_node_handle.serviceClient<asdr::set_state>(ros::names::resolve("set_state"));
     m_set_velocity_client = m_node_handle.serviceClient<asdr::set_velocity>(ros::names::resolve("set_velocity"));
+    m_get_image_client = m_node_handle.serviceClient<asdr::get_image>(ros::names::resolve("get_image"));
 
     m_listener.support(web::http::methods::GET, std::bind(&RESTNode::onGet, this, std::placeholders::_1));
     m_listener.support(web::http::methods::POST, std::bind(&RESTNode::onPost, this, std::placeholders::_1));
@@ -37,6 +38,34 @@ void RESTNode::onGet(web::http::http_request const &request)
             response.headers().add("Access-Control-Allow-Origin", "*");
             
             response.set_body(get_state_srv.response.state);
+
+            request.reply(response);
+        }
+        else {
+            web::http::http_response response(web::http::status_codes::InternalError);
+
+            response.headers().add("Content-Type", "text/plain; charset=UTF-8");
+            response.headers().add("Access-Control-Allow-Origin", "*");
+            
+            request.reply(response);
+        }
+    }
+    else if (path[0] == "get_image") {
+        asdr::get_image get_image_srv;
+
+        if (m_get_image_client.call(get_image_srv)) {
+            web::http::http_response response(web::http::status_codes::OK);
+
+            response.headers().add("Content-Type", "application/json; charset=UTF-8");
+            response.headers().add("Access-Control-Allow-Origin", "*");
+
+            web::json::value body;
+
+            body["image"] = web::json::value::string(utility::conversions::to_base64(get_image_srv.response.image));
+            body["width"] = web::json::value::number(get_image_srv.response.width);
+            body["height"] = web::json::value::number(get_image_srv.response.height);
+
+            response.set_body(body);
 
             request.reply(response);
         }

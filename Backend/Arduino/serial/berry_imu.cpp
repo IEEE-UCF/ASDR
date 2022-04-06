@@ -25,7 +25,7 @@ BerryIMU::BerryIMU(int32_t const &FS_G, int32_t const &FS_XL, int32_t const &FS_
 // Convert to SI units [mdeg/sec]->[rad/sec]
 void BerryIMU::readGyr(float gyr[3])
 {
-    float const conversion { 3.14159265358979323846f / 180.0f / 1000.0f }; 
+    float constexpr conversion { 3.14159265358979323846f / 180.0f / 1000.0f }; 
     
     int16_t raw[3];
     
@@ -39,7 +39,7 @@ void BerryIMU::readGyr(float gyr[3])
 // Convert to SI units [mG]->[m/s^2]
 void BerryIMU::readAcc(float acc[3])
 {
-    float const conversion { 9.8f / 1000.0f };
+    float constexpr conversion { 9.8f / 1000.0f };
     
     int16_t raw[3];
     
@@ -53,7 +53,7 @@ void BerryIMU::readAcc(float acc[3])
 // Convert to SI units [Gauss]->[Tesla]
 void BerryIMU::readMag(float mag[3])
 {
-    float const conversion { 1.0f / 10000.0f };
+    float constexpr conversion { 1.0f / 10000.0f };
     
     int16_t raw[3];
     
@@ -86,7 +86,7 @@ void BerryIMU::read(uint8_t const &device, uint8_t const &address, size_t const 
 
     Wire.requestFrom(device, size); 
 
-    for (size_t index = 0; Wire.available(); ++index) {
+    for (size_t index = 0; index < size && Wire.available(); ++index) {
         buffer[index] = Wire.read();
     }
 

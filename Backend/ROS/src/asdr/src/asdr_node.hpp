@@ -11,10 +11,12 @@
 #include "ros/console.h"
 
 #include "geometry_msgs/Twist.h"
+#include "nav_msgs/OccupancyGrid.h"
 
 #include "asdr/set_state.h"
 #include "asdr/get_state.h"
 #include "asdr/set_velocity.h"
+#include "asdr/get_image.h"
 
 #include "asdr.hpp"
 
@@ -27,6 +29,7 @@ class ASDRNode
     ros::ServiceServer m_get_state_server;
     ros::ServiceServer m_set_state_server;
     ros::ServiceServer m_set_velocity_server;
+    ros::ServiceServer m_get_image_server;
 
     ros::Publisher m_cmd_vel_publisher;
 
@@ -45,4 +48,5 @@ private:
     bool onGetState(asdr::get_state::Request &request, asdr::get_state::Response &response);
     bool onSetState(asdr::set_state::Request &request, asdr::set_state::Response &response);
     bool onSetVelocity(asdr::set_velocity::Request &request, asdr::set_velocity::Response &response);
+    bool onGetImage(asdr::get_image::Request &request, asdr::get_image::Response &response);
 };
