@@ -1,5 +1,7 @@
 # Autonomous Surface Disinfection Robot 
 
+![ASDR Logo](Documents/asdr_logo.png)
+
 ![ASDR](Documents/ASDR.png)
 
 ## Dependencies
