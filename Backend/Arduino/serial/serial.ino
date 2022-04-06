@@ -36,9 +36,9 @@ uint8_t berry_imu_read(uint8_t const &request_size, uint8_t const *request_buffe
     float acc[3];
     float mag[3];
   
-    berry_imu.readGyr(gyr);
-    berry_imu.readAcc(acc);
-    berry_imu.readMag(mag);
+    berry_imu.readGyr(&gyr[0]);
+    berry_imu.readAcc(&acc[0]);
+    berry_imu.readMag(&mag[0]);
   
     response_size = sizeof(float) * 3 * 3;
   

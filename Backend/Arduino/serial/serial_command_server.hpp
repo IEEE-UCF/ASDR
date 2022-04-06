@@ -66,6 +66,7 @@ public:
     {
         if (Serial.available()) {
             SerialCommandRequest request;
+            SerialCommandResponse response;
         
             Serial.readBytes(&request.command, sizeof(uint8_t));  
             Serial.readBytes(&request.size, sizeof(uint8_t));
@@ -73,11 +74,8 @@ public:
             if (request.size > 0) {
                 Serial.readBytes(&request.buffer[0], request.size);
             }
-        
-            SerialCommandResponse response;
-        
+
             response.status = SerialCommandStatus::FAILURE;
-            response.size = 0;
             
             for (size_t index = 0; index < m_num_commands; ++index) {
                 if (m_serial_commands[index].command == request.command) {
@@ -85,6 +83,10 @@ public:
             
                     break;
                 }
+            }
+
+            if (response.status == SerialCommandStatus::FAILURE) {
+                response.size = 0;
             }
         
             Serial.write(&response.status, sizeof(uint8_t));

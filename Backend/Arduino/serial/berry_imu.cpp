@@ -4,7 +4,7 @@
 
 #include "berry_imu.hpp"
 
-BerryIMU::BerryIMU(int32_t const &FS_G, int32_t const &FS_XL, int32_t const &FS_M) : m_FS_G(FS_G), m_FS_XL(FS_XL), m_FS_M(FS_M)
+BerryIMU::BerryIMU(uint8_t const &FS_G, uint8_t const &FS_XL, uint8_t const &FS_M) : m_FS_G(FS_G), m_FS_XL(FS_XL), m_FS_M(FS_M)
 {
     Wire.begin();
 
@@ -74,7 +74,7 @@ void BerryIMU::write(uint8_t const &device, uint8_t const &address, uint8_t cons
     Wire.endTransmission(); 
 }
 
-void BerryIMU::read(uint8_t const &device, uint8_t const &address, size_t const &size, uint8_t *buffer) 
+void BerryIMU::read(uint8_t const &device, uint8_t const &address, uint8_t const &size, uint8_t *buffer) 
 {
     Wire.beginTransmission(device); 
 
