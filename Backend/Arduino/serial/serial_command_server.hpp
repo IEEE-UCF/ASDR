@@ -33,14 +33,21 @@ class SerialCommandServer
     {
         uint8_t command;
         uint8_t (*callback)(uint8_t const &, uint8_t const *, uint8_t &, uint8_t *);
+
+        SerialCommand() :
+            command { ~0 },
+            callback { nullptr }
+        {            
+        }
     };
   
     SerialCommand m_serial_commands[MAX_COMMANDS];
   
-    size_t m_num_commands = 0;
+    size_t m_num_commands;
   
 public:
-    SerialCommandServer()
+    SerialCommandServer() :
+        m_num_commands { 0 }
     {
         Serial.begin(115200);
       
@@ -49,7 +56,7 @@ public:
 
     bool registerCommand(uint8_t const &command, uint8_t (*callback)(uint8_t const &, uint8_t const *, uint8_t &, uint8_t *))
     {
-        if (m_num_commands >= MAX_COMMANDS) {
+        if (m_num_commands >= MAX_COMMANDS || command == ~0 || callback == nullptr) {
             return false;
         }
         else {
