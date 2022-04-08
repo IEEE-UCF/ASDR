@@ -8,8 +8,8 @@
 
 class StepperMotor
 {  
-    uint8_t m_dir_pin;
-    uint8_t m_pul_pin;
+    uint8_t m_pin_dir;
+    uint8_t m_pin_pul;
   
     float m_period;  
     float m_duty_cycle;
@@ -24,7 +24,7 @@ class StepperMotor
     float m_max_velocity;
   
 public:
-    StepperMotor(uint8_t const &dir_pin, uint8_t const &pul_pin, uint32_t const &steps_per_revolution, float const &max_velocity);
+    StepperMotor(uint8_t const &pin_dir, uint8_t const &pin_pul, uint32_t const &steps_per_revolution, float const &max_velocity);
   
     void setVelocity(float const &velocity);
   

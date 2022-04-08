@@ -41,7 +41,7 @@ void RotaryEncoder::update()
         step(elapsed);
     }
     else {
-        static float const max_time = static_cast<float>(uint32_t(~0)) * 1e-6;
+        static float const max_time = static_cast<float>(~0U) * 1e-6;
         
         float const elapsed = max_time - m_then + now;
     

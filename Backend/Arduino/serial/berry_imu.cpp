@@ -4,7 +4,10 @@
 
 #include "berry_imu.hpp"
 
-BerryIMU::BerryIMU(uint8_t const &FS_G, uint8_t const &FS_XL, uint8_t const &FS_M) : m_FS_G(FS_G), m_FS_XL(FS_XL), m_FS_M(FS_M)
+BerryIMU::BerryIMU(uint8_t const &FS_G, uint8_t const &FS_XL, uint8_t const &FS_M) : 
+    m_FS_G { FS_G }, 
+    m_FS_XL { FS_XL }, 
+    m_FS_M { FS_M }
 {
     Wire.begin();
 

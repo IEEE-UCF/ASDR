@@ -33,12 +33,6 @@ class SerialCommandServer
     {
         uint8_t command;
         uint8_t (*callback)(uint8_t const &, uint8_t const *, uint8_t &, uint8_t *);
-
-        SerialCommand() :
-            command { ~0 },
-            callback { nullptr }
-        {            
-        }
     };
   
     SerialCommand m_serial_commands[MAX_COMMANDS];
@@ -56,7 +50,7 @@ public:
 
     bool registerCommand(uint8_t const &command, uint8_t (*callback)(uint8_t const &, uint8_t const *, uint8_t &, uint8_t *))
     {
-        if (m_num_commands >= MAX_COMMANDS || command == ~0 || callback == nullptr) {
+        if (m_num_commands >= MAX_COMMANDS || callback == nullptr) {
             return false;
         }
         else {
@@ -83,7 +77,7 @@ public:
             }
 
             response.status = SerialCommandStatus::FAILURE;
-            
+
             for (size_t index = 0; index < m_num_commands; ++index) {
                 if (m_serial_commands[index].command == request.command) {
                     response.status = m_serial_commands[index].callback(request.size, request.buffer, response.size, response.buffer);
