@@ -18,7 +18,7 @@ RotaryEncoder::RotaryEncoder(uint8_t const &pin_1, uint8_t const &pin_2, uint32_
   
     m_state = digitalRead(m_pin_1) | (digitalRead(m_pin_2) << 1);
   
-    m_then = static_cast<float>(micros()) * 1e-6;
+    m_then = micros();
 }
 
 float RotaryEncoder::getPosition() const
@@ -33,17 +33,15 @@ float RotaryEncoder::getVelocity() const
 
 void RotaryEncoder::update()
 {
-    float const now = static_cast<float>(micros()) * 1e-6;
+    uint32_t const now = micros();
   
     if (now > m_then) {
-        float const elapsed = now - m_then;
+        float const elapsed = static_cast<float>(now - m_then) * 1e-6;
     
         step(elapsed);
     }
-    else {
-        static float const max_time = static_cast<float>(~0U) * 1e-6;
-        
-        float const elapsed = max_time - m_then + now;
+    else {        
+        float const elapsed = static_cast<float>(~0U - m_then + now) * 1e-6;
     
         step(elapsed);
     }

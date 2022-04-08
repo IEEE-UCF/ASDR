@@ -28,7 +28,7 @@ class RotaryEncoder
   
     float m_elapsed;
     
-    float m_then;
+    uint32_t m_then;
 
 public:
     RotaryEncoder(uint8_t const &pin_1, uint8_t const &pin_2, uint32_t const &steps_per_revolution);

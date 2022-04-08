@@ -19,7 +19,7 @@ StepperMotor::StepperMotor(uint8_t const &pin_dir, uint8_t const &pin_pul, uint3
     pinMode(m_pin_dir, OUTPUT);
     pinMode(m_pin_pul, OUTPUT);
   
-    m_then = static_cast<float>(micros()) * 1e-6;
+    m_then = micros();
 }
 
 void StepperMotor::setVelocity(float const &velocity)
@@ -53,17 +53,15 @@ void StepperMotor::setVelocity(float const &velocity)
 
 void StepperMotor::update()
 {
-    float const now = static_cast<float>(micros()) * 1e-6;
+    uint32_t const now = micros();
   
     if (now > m_then) {
-        float const elapsed = now - m_then;
+        float const elapsed = static_cast<float>(now - m_then) * 1e-6;
     
         pulse(elapsed);
     }
     else {
-        static float const max_time = static_cast<float>(~0U) * 1e-6;
-        
-        float const elapsed = max_time - m_then + now;
+        float const elapsed = static_cast<float>(~0U - m_then + now) * 1e-6;
     
         pulse(elapsed);
     }

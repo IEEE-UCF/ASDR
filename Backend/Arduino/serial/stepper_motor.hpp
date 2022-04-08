@@ -16,8 +16,9 @@ class StepperMotor
     
     uint8_t m_state;
     
-    float m_elapsed;    
-    float m_then;
+    float m_elapsed;
+        
+    uint32_t m_then;
 
     uint32_t m_steps_per_revolution;
   
