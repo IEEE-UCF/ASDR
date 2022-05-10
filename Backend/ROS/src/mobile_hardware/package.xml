@@ -52,7 +52,7 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>adr</build_depend>
+  <build_depend>asdr</build_depend>
   <build_depend>rotary_encoder</build_depend>
   <build_depend>stepper_motor</build_depend>
   <build_export_depend>roscpp</build_export_depend>
@@ -61,7 +61,7 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>adr</exec_depend>
+  <exec_depend>asdr</exec_depend>
   <exec_depend>rotary_encoder</exec_depend>
   <exec_depend>stepper_motor</exec_depend>
 
