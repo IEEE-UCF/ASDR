@@ -43,8 +43,12 @@ public:
     SerialCommandServer() :
         m_num_commands { 0 }
     {
+    }
+
+    void setup()
+    {
         Serial.begin(115200);
-      
+        
         while (!Serial);
     }
 
@@ -64,7 +68,7 @@ public:
     }
     
     void listen()
-    {
+    {      
         if (Serial.available()) {
             SerialCommandRequest request;
             SerialCommandResponse response;
@@ -77,6 +81,7 @@ public:
             }
 
             response.status = SerialCommandStatus::FAILURE;
+            response.size = 0;
 
             for (size_t index = 0; index < m_num_commands; ++index) {
                 if (m_serial_commands[index].command == request.command) {
@@ -89,7 +94,7 @@ public:
             if (response.status == SerialCommandStatus::FAILURE) {
                 response.size = 0;
             }
-        
+
             Serial.write(&response.status, sizeof(uint8_t));
             Serial.write(&response.size, sizeof(uint8_t));
         

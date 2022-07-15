@@ -20,17 +20,17 @@ SerialCommandServer<4> serial_command_server;
 BerryIMU berry_imu;
 
 RotaryEncoder rotary_encoder[4] = {
-    RotaryEncoder(5, 6, 300),
-    RotaryEncoder(7, 8, 300),
-    RotaryEncoder(9, 10, 300),
-    RotaryEncoder(11, 12, 300)
+    RotaryEncoder(2, 3, 300),
+    RotaryEncoder(4, 5, 300),
+    RotaryEncoder(6, 7, 300),
+    RotaryEncoder(8, 9, 300)
 };
 
 StepperMotor stepper_motor[4] = {
-    StepperMotor(9, 10, 15652, 3.141592f / 3.0f),
-    StepperMotor(11, 12, 15652, 3.141592f / 3.0f),
-    StepperMotor(13, 14, 15652, 3.141592f / 3.0f),
-    StepperMotor(15, 16, 15652, 3.141592f / 3.0f)
+    StepperMotor(22, 23, 3000, 3.141592f * 5.0f / 3.0f),
+    StepperMotor(24, 25, 3000, 3.141592f * 5.0f / 3.0f),
+    StepperMotor(26, 27, 3000, 3.141592f * 5.0f / 3.0f),
+    StepperMotor(28, 29, 3000, 3.141592f * 5.0f / 3.0f)
 };
 
 uint8_t berry_imu_read(uint8_t const &request_size, uint8_t const *request_buffer, uint8_t &response_size, uint8_t *response_buffer)
@@ -99,8 +99,12 @@ uint8_t stepper_motor_write(uint8_t const &request_size, uint8_t const *request_
     return SerialCommandStatus::FAILURE;
 }
 
-void setup() 
+void setup()
 {
+    //berry_imu.setup();
+  
+    serial_command_server.setup();
+  
     serial_command_server.registerCommand(BERRY_IMU_READ_COMMAND, &berry_imu_read);
     serial_command_server.registerCommand(UVC_LIGHT_WRITE_COMMAND, &uvc_light_write);
     serial_command_server.registerCommand(ROTARY_ENCODER_READ_COMMAND, &rotary_encoder_read); 
@@ -108,9 +112,9 @@ void setup()
 }
 
 void loop() 
-{
+{    
     serial_command_server.listen();
-  
+
     for (uint32_t rotary_encoder_id = 0; rotary_encoder_id < 4; ++rotary_encoder_id) {
         rotary_encoder[rotary_encoder_id].update();
     }

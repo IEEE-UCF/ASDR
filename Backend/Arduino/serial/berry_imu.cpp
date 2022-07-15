@@ -9,6 +9,10 @@ BerryIMU::BerryIMU(uint8_t const &FS_G, uint8_t const &FS_XL, uint8_t const &FS_
     m_FS_XL { FS_XL }, 
     m_FS_M { FS_M }
 {
+}
+
+void BerryIMU::setup()
+{
     Wire.begin();
 
     //Enable  gyroscope

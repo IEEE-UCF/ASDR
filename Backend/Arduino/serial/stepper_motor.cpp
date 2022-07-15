@@ -16,6 +16,10 @@ StepperMotor::StepperMotor(uint8_t const &pin_dir, uint8_t const &pin_pul, uint3
     m_steps_per_revolution { steps_per_revolution }, 
     m_max_velocity { max_velocity }
 {
+    if (m_period < 1e-3) {
+        m_period = 1e-3;
+    }
+  
     pinMode(m_pin_dir, OUTPUT);
     pinMode(m_pin_pul, OUTPUT);
   
